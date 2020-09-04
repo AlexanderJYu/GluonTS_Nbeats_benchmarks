@@ -16,7 +16,10 @@ from gluonts.dataset.common import TrainDatasets, load_datasets
 # name = "traffic_nbeats_last7days"
 # name = "electricity_nbeats_last7days_predlen1"
 # name = "traffic_nbeats_last7days_predlen1"
-name = "tourism_monthly_predlen1"
+# name = "tourism_monthly_predlen1"
+name = "tourism_monthly_predlen24"
+predlen=24
+
 dataset_path = Path('./' + name)
 dataset = load_datasets(
         metadata=dataset_path,
@@ -33,8 +36,8 @@ dataset_test_list = list(dataset.test)
 dataset_train_np = [np.asarray(to_pandas(train_entry)) for train_entry in dataset_train_list]
 dataset_test_np = [np.asarray(to_pandas(test_entry)) for test_entry in dataset_test_list]
 
-X_test = [test_entry[-8:-1] for test_entry in dataset_test_np]
-Y_test = [test_entry[-1] for test_entry in dataset_test_np]
+X_test = [test_entry[-8*predlen:-1*predlen] for test_entry in dataset_test_np]
+Y_test = [test_entry[-1*predlen:] for test_entry in dataset_test_np]
 
 with open("./nips_datasets/" + name + "/" + name + "_X.pkl", "wb") as f:
     pickle.dump(X_test, f)
